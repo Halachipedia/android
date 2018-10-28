@@ -19,10 +19,11 @@ public class MainActivity extends AppCompatActivity {
         webView = (WebView) findViewById(R.id.webview);
         webView.setWebViewClient(new WebViewClient());
         if (savedInstanceState == null) {
-            webView.loadUrl("http://www.halachipedia.com");
+            webView.loadUrl("https://www.halachipedia.com");
         }
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
 
     }
 
