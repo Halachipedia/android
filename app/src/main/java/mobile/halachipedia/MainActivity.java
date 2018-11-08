@@ -3,11 +3,10 @@ package mobile.halachipedia;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.webkit.*;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
@@ -31,8 +30,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadWebView(Bundle savedInstanceState) {
-        webView = (WebView) findViewById(R.id.webview);
-        webView.setWebViewClient(new WebViewClient());
+        webView = findViewById(R.id.webview);
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                error();
+            }
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error){
+                error();
+            }
+            private void error () {
+                webView.loadUrl("file:///android_asset/error.html");
+                String error = "יגאת ולא מצאת!\nYou'll need an active internet connection to use the app! ";
+                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+            }
+        });
         if (savedInstanceState == null) {
             webView.loadUrl(URL);
         }
