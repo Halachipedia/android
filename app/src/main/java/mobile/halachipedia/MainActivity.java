@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
+                        swipe.setRefreshing(true);
                         webView.loadUrl(webView.getUrl());
+                        swipe.setRefreshing(false);
                     }
                 }
         );
