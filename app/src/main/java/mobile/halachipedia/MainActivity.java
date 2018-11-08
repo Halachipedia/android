@@ -1,5 +1,6 @@
 package mobile.halachipedia;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -10,21 +11,43 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
+    private SwipeRefreshLayout swipe;
+    private final String URL = "https://www.halachipedia.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        webView = (WebView) findViewById(R.id.webview);
-        webView.setWebViewClient(new WebViewClient());
-        if (savedInstanceState == null) {
-            webView.loadUrl("https://www.halachipedia.com");
-        }
+        loadWebView(savedInstanceState);
+        loadWebSettings();
+        loadSwipe();
+
+    }
+
+    private void loadWebSettings() {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+    }
 
+    private void loadWebView(Bundle savedInstanceState) {
+        webView = (WebView) findViewById(R.id.webview);
+        webView.setWebViewClient(new WebViewClient());
+        if (savedInstanceState == null) {
+            webView.loadUrl(URL);
+        }
+    }
+
+    private void loadSwipe() {
+        swipe = findViewById(R.id.swipe);
+        swipe.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        webView.loadUrl(webView.getUrl());
+                    }
+                }
+        );
     }
 
     @Override
